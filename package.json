@@ -1,0 +1,24 @@
+{
+  "name": "bluedit-bff",
+  "version": "1.0.0",
+  "description": "Bluedit BFF Layer on Node.js + GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanlie/bluedit-bff.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonathanlie/bluedit-bff/issues"
+  },
+  "homepage": "https://github.com/jonathanlie/bluedit-bff#readme",
+  "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "graphql": "^16.11.0"
+  }
+}
