@@ -29,6 +29,11 @@ describe('GraphQL Server Integration', () => {
     app = express();
     app.use(express.json());
 
+    // Add health check endpoint first
+    app.get('/health', (req, res) => {
+      res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    });
+
     // Create Apollo Server
     server = new ApolloServer({
       typeDefs,
@@ -43,11 +48,6 @@ describe('GraphQL Server Integration', () => {
         context: contextMiddleware,
       })
     );
-
-    // Add health check endpoint
-    app.get('/health', (req, res) => {
-      res.json({ status: 'ok', timestamp: new Date().toISOString() });
-    });
   });
 
   afterAll(async () => {
@@ -98,7 +98,7 @@ describe('GraphQL Server Integration', () => {
         });
 
       // GraphQL may return 400 for invalid queries
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('errors');
     });
   });
