@@ -5,7 +5,10 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs } from '../../src/schema/index.js';
 import { resolvers } from '../../src/schema/resolvers/index.js';
-import { contextMiddleware, GraphQLContext } from '../../src/middleware/context.js';
+import {
+  contextMiddleware,
+  GraphQLContext,
+} from '../../src/middleware/context.js';
 
 // Mock the API client
 jest.mock('../../src/services/api-client.js', () => ({
@@ -14,7 +17,7 @@ jest.mock('../../src/services/api-client.js', () => ({
     post: jest.fn(),
     put: jest.fn(),
     delete: jest.fn(),
-  }
+  },
 }));
 
 describe('GraphQL Server Integration', () => {
@@ -34,9 +37,12 @@ describe('GraphQL Server Integration', () => {
     await server.start();
 
     // Apply Apollo middleware
-    app.use('/', expressMiddleware(server, {
-      context: contextMiddleware,
-    }));
+    app.use(
+      '/',
+      expressMiddleware(server, {
+        context: contextMiddleware,
+      })
+    );
 
     // Add health check endpoint
     app.get('/health', (req, res) => {
@@ -50,8 +56,7 @@ describe('GraphQL Server Integration', () => {
 
   describe('Health Check', () => {
     it('should return health status', async () => {
-      const response = await request(app)
-        .get('/health');
+      const response = await request(app).get('/health');
 
       // Check if we get a response, even if it's an error
       expect(response.status).toBe(200);

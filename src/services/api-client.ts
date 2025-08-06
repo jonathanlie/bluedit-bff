@@ -5,8 +5,9 @@ interface RequestHeaders {
   [key: string]: string;
 }
 
-interface ApiResponse<T = any> {
-  data: T;
+interface ErrorResponse {
+  error?: string;
+  errors?: string[];
 }
 
 class ApiClient {
@@ -19,36 +20,60 @@ class ApiClient {
     });
   }
 
-  async get<T = any>(endpoint: string, headers: RequestHeaders = {}): Promise<T> {
+  async get<T = unknown>(
+    endpoint: string,
+    headers: RequestHeaders = {}
+  ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.get(endpoint, { headers });
+      const response: AxiosResponse<T> = await this.client.get(endpoint, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error as AxiosError);
     }
   }
 
-  async post<T = any>(endpoint: string, data: any, headers: RequestHeaders = {}): Promise<T> {
+  async post<T = unknown>(
+    endpoint: string,
+    data: unknown,
+    headers: RequestHeaders = {}
+  ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.post(endpoint, data, { headers });
+      const response: AxiosResponse<T> = await this.client.post(
+        endpoint,
+        data,
+        { headers }
+      );
       return response.data;
     } catch (error) {
       throw this.handleError(error as AxiosError);
     }
   }
 
-  async put<T = any>(endpoint: string, data: any, headers: RequestHeaders = {}): Promise<T> {
+  async put<T = unknown>(
+    endpoint: string,
+    data: unknown,
+    headers: RequestHeaders = {}
+  ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.put(endpoint, data, { headers });
+      const response: AxiosResponse<T> = await this.client.put(endpoint, data, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error as AxiosError);
     }
   }
 
-  async delete<T = any>(endpoint: string, headers: RequestHeaders = {}): Promise<T> {
+  async delete<T = unknown>(
+    endpoint: string,
+    headers: RequestHeaders = {}
+  ): Promise<T> {
     try {
-      const response: AxiosResponse<T> = await this.client.delete(endpoint, { headers });
+      const response: AxiosResponse<T> = await this.client.delete(endpoint, {
+        headers,
+      });
       return response.data;
     } catch (error) {
       throw this.handleError(error as AxiosError);
@@ -58,10 +83,11 @@ class ApiClient {
   private handleError(error: AxiosError): Error {
     if (error.response) {
       // Server responded with error status
-      const responseData = error.response.data as any;
-      const message = responseData?.error ||
-                     responseData?.errors?.join(', ') ||
-                     error.message;
+      const responseData = error.response.data as ErrorResponse;
+      const message =
+        responseData?.error ||
+        responseData?.errors?.join(', ') ||
+        error.message;
       return new Error(message);
     } else if (error.request) {
       // Request was made but no response received

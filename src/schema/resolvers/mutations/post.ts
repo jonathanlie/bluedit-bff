@@ -10,16 +10,21 @@ export const postMutationResolvers: MutationResolvers = {
     context: GraphQLContext
   ): Promise<Post | null> => {
     try {
-      const response = await apiClient.post('/posts', {
-        subbluedit_name: subblueditName,
-        title,
-        body,
-      }, {
-        'Cookie': context.req.headers.cookie || '',
-      }) as ApiPost;
+      const response = (await apiClient.post(
+        '/posts',
+        {
+          subbluedit_name: subblueditName,
+          title,
+          body,
+        },
+        {
+          Cookie: context.req.headers.cookie || '',
+        }
+      )) as ApiPost;
 
       return response as Post;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error creating post:', error);
       throw new Error('Failed to create post');
     }

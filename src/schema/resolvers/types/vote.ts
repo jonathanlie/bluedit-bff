@@ -1,4 +1,7 @@
-import { VoteResolvers, ResolversParentTypes } from '../../../generated/graphql-types.js';
+import {
+  VoteResolvers,
+  ResolversParentTypes,
+} from '../../../generated/graphql-types.js';
 
 export const voteResolvers: VoteResolvers = {
   user: async (vote: ResolversParentTypes['Vote']) => vote.user ?? null,

@@ -1,5 +1,8 @@
 import { apiClient } from '../../../services/api-client.js';
-import { QueryResolvers, Subbluedit } from '../../../generated/graphql-types.js';
+import {
+  QueryResolvers,
+  Subbluedit,
+} from '../../../generated/graphql-types.js';
 import { ApiSubbluedit } from '../../../types/api.js';
 
 export const subblueditQueryResolvers: QueryResolvers = {
@@ -8,10 +11,13 @@ export const subblueditQueryResolvers: QueryResolvers = {
     { name }
   ): Promise<Subbluedit | null> => {
     try {
-      const response = await apiClient.get(`/subbluedits/${name}`) as ApiSubbluedit;
+      const response = (await apiClient.get(
+        `/subbluedits/${name}`
+      )) as ApiSubbluedit;
       return response as Subbluedit;
     } catch (error) {
       if (error instanceof Error && error.message.includes('404')) return null;
+      // eslint-disable-next-line no-console
       console.error('Error fetching subbluedit:', error);
       throw new Error('Failed to fetch subbluedit');
     }

@@ -1,4 +1,7 @@
-import { VoteableResolvers, ResolversParentTypes } from '../../../generated/graphql-types.js';
+import {
+  VoteableResolvers,
+  ResolversParentTypes,
+} from '../../../generated/graphql-types.js';
 import { commentResolvers } from './comment.js';
 import { postResolvers } from './post.js';
 import { subblueditResolvers } from './subbluedit.js';

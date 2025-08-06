@@ -20,9 +20,9 @@ describe('Configuration', () => {
       expect(typeof config.server.port).toBe('string');
     });
 
-    it('should use environment variable for port', () => {
+    it('should use environment variable for port', async () => {
       process.env['PORT'] = '5000';
-      const { config: newConfig } = require('../../src/config/index.js');
+      const { config: newConfig } = await import('../../src/config/index.js');
 
       expect(newConfig.server.port).toBe('5000');
     });
@@ -40,9 +40,9 @@ describe('Configuration', () => {
       expect(typeof config.api.timeout).toBe('number');
     });
 
-    it('should use environment variable for API URL', () => {
+    it('should use environment variable for API URL', async () => {
       process.env['API_URL'] = 'http://test-api.com';
-      const { config: newConfig } = require('../../src/config/index.js');
+      const { config: newConfig } = await import('../../src/config/index.js');
 
       expect(newConfig.api.url).toBe('http://test-api.com');
     });

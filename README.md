@@ -13,15 +13,18 @@ GraphQL Backend for Frontend (BFF) server that acts as a proxy between the front
 ## Development
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
 ### Installation
+
 ```bash
 npm install
 ```
 
 ### Available Scripts
+
 - `npm run dev` - Start development server with hot reload (nodemon)
 - `npm start` - Start production server
 - `npm test` - Run tests (not configured yet)
@@ -29,12 +32,15 @@ npm install
 - `npm run format` - Format code (not configured yet)
 
 ### Development Server
+
 The development server runs on `http://localhost:4000` with:
+
 - Hot reload on file changes
 - GraphQL endpoint at `/`
 - Health check at `/health`
 
 ### Project Structure
+
 ```
 src/
 ├── config/          # Configuration management
@@ -75,6 +81,7 @@ src/
 ## Example Usage
 
 ### Authentication
+
 ```graphql
 mutation {
   signInWithGoogle(googleToken: "google_oauth_token") {
@@ -87,6 +94,7 @@ mutation {
 ```
 
 ### Create Subbluedit
+
 ```graphql
 mutation {
   createSubbluedit(name: "dota2", description: "Dota 2 community") {
@@ -98,9 +106,14 @@ mutation {
 ```
 
 ### Create Post
+
 ```graphql
 mutation {
-  createPost(subblueditId: "dota2", title: "New Meta", body: "What do you think about the new meta?") {
+  createPost(
+    subblueditId: "dota2"
+    title: "New Meta"
+    body: "What do you think about the new meta?"
+  ) {
     id
     title
     body
@@ -109,9 +122,13 @@ mutation {
 ```
 
 ### Create Comment
+
 ```graphql
 mutation {
-  createComment(postId: "post-uuid", body: "Great post! I agree with your analysis.") {
+  createComment(
+    postId: "post-uuid"
+    body: "Great post! I agree with your analysis."
+  ) {
     id
     body
     user {
@@ -122,6 +139,7 @@ mutation {
 ```
 
 ### Vote on Post
+
 ```graphql
 mutation {
   vote(votableId: "post-uuid", votableType: "Post", value: 1)
@@ -129,6 +147,7 @@ mutation {
 ```
 
 ### Vote on Comment
+
 ```graphql
 mutation {
   vote(votableId: "comment-uuid", votableType: "Comment", value: -1)
@@ -136,6 +155,7 @@ mutation {
 ```
 
 ### Get Subbluedit with Posts and Comments
+
 ```graphql
 query {
   subblueditByName(name: "dota2") {
@@ -174,6 +194,7 @@ query {
 ## Error Handling
 
 All mutations return appropriate error messages for:
+
 - Authentication failures
 - Invalid parameters
 - Resource not found

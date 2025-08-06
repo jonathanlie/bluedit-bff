@@ -10,16 +10,21 @@ export const voteMutationResolvers: MutationResolvers = {
     context: GraphQLContext
   ): Promise<boolean | null> => {
     try {
-      const response = await apiClient.post('/votes', {
-        votable_id: votableId,
-        votable_type: votableType,
-        value,
-      }, {
-        'Cookie': context.req.headers.cookie || '',
-      }) as ApiVoteResponse;
+      const response = (await apiClient.post(
+        '/votes',
+        {
+          votable_id: votableId,
+          votable_type: votableType,
+          value,
+        },
+        {
+          Cookie: context.req.headers.cookie || '',
+        }
+      )) as ApiVoteResponse;
 
       return response.success;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error voting:', error);
       throw new Error('Failed to vote');
     }
