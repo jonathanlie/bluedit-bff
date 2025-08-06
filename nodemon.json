@@ -1,7 +1,7 @@
 {
-  "watch": ["index.js", "src/"],
-  "ext": "js,json",
-  "ignore": ["node_modules/", "*.test.js", "*.spec.js"],
+  "watch": ["index.ts", "src/"],
+  "ext": "ts,js,json",
+  "ignore": ["node_modules/", "*.test.ts", "*.spec.ts", "dist/"],
   "env": {
     "NODE_ENV": "development"
   },
