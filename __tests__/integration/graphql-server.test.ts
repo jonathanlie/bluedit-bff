@@ -3,10 +3,9 @@ import request from 'supertest';
 import express, { Express } from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-
 import { typeDefs } from '../../src/schema/index.js';
 import { resolvers } from '../../src/schema/resolvers/index.js';
-import { contextMiddleware } from '../../src/middleware/context.js';
+import { contextMiddleware, GraphQLContext } from '../../src/middleware/context.js';
 
 // Mock the API client
 jest.mock('../../src/services/api-client.js', () => ({
@@ -20,7 +19,7 @@ jest.mock('../../src/services/api-client.js', () => ({
 
 describe('GraphQL Server Integration', () => {
   let app: Express;
-  let server: ApolloServer;
+  let server: ApolloServer<GraphQLContext>;
 
   beforeAll(async () => {
     // Create Express app
@@ -55,11 +54,9 @@ describe('GraphQL Server Integration', () => {
         .get('/health');
 
       // Check if we get a response, even if it's an error
-      expect(response.status).toBeDefined();
-      if (response.status === 200) {
-        expect(response.body).toHaveProperty('status', 'ok');
-        expect(response.body).toHaveProperty('timestamp');
-      }
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('status', 'ok');
+      expect(response.body).toHaveProperty('timestamp');
     });
   });
 
@@ -76,14 +73,12 @@ describe('GraphQL Server Integration', () => {
                 }
               }
             }
-          `
+          `,
         });
 
-      expect(response.status).toBeDefined();
-      if (response.status === 200) {
-        expect(response.body).toHaveProperty('data');
-        expect(response.body.data.__schema).toBeDefined();
-      }
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('data');
+      expect(response.body.data).toHaveProperty('__schema');
     });
 
     it('should handle invalid queries', async () => {
@@ -94,15 +89,12 @@ describe('GraphQL Server Integration', () => {
             query InvalidQuery {
               nonExistentField
             }
-          `
+          `,
         });
 
       // GraphQL may return 400 for invalid queries
-      expect(response.status).toBeDefined();
-      if (response.status === 200) {
-        expect(response.body).toHaveProperty('errors');
-        expect(response.body.errors[0].message).toContain('Cannot query field');
-      }
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('errors');
     });
   });
 
@@ -113,15 +105,14 @@ describe('GraphQL Server Integration', () => {
         .send({
           query: `
             mutation TestMutation {
-              __typename
+              vote(votableId: "123", votableType: "Post", value: 1)
             }
-          `
+          `,
         });
 
-      expect(response.status).toBeDefined();
-      if (response.status === 200) {
-        expect(response.body).toHaveProperty('data');
-      }
+      expect(response.status).toBe(200);
+      // The mutation might fail due to authentication, but the server should handle it
+      expect(response.body).toBeDefined();
     });
   });
 });

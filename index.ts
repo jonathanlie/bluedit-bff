@@ -15,7 +15,7 @@ app.use(corsMiddleware);
 app.use(bodyParser.json());
 
 // Health check endpoint (must be before Apollo Server)
-app.get('/health', (req, res) => {
+app.get('/health', (req: express.Request, res: express.Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
@@ -23,6 +23,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
+
 await server.start();
 
 app.use('/', expressMiddleware(server, {
