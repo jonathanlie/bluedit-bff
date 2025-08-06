@@ -7,7 +7,7 @@ const config: CodegenConfig = {
     // Specify the output path for the generated types
     './src/generated/graphql-types.ts': {
       plugins: [
-        'typescript',           // Generates base types (e.g., User, Post)
+        'typescript', // Generates base types (e.g., User, Post)
         'typescript-resolvers', // Generates types for your resolvers
       ],
       config: {

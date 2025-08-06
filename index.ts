@@ -26,13 +26,19 @@ const server = new ApolloServer({
 
 await server.start();
 
-app.use('/', expressMiddleware(server, {
-  context: contextMiddleware,
-}));
+app.use(
+  '/',
+  expressMiddleware(server, {
+    context: contextMiddleware,
+  })
+);
 
 // Start server
 app.listen(config.server.port, () => {
+  // eslint-disable-next-line no-console
   console.log(`🚀 BFF Server ready at: http://localhost:${config.server.port}`);
+  // eslint-disable-next-line no-console
   console.log(`📊 GraphQL endpoint: http://localhost:${config.server.port}/`);
+  // eslint-disable-next-line no-console
   console.log(`🏥 Health check: http://localhost:${config.server.port}/health`);
 });

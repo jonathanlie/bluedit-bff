@@ -10,6 +10,9 @@ export interface GraphQLContext {
   res: Response;
 }
 
-export const contextMiddleware = async ({ req, res }: ContextParams): Promise<GraphQLContext> => {
+export const contextMiddleware = async ({
+  req,
+  res,
+}: ContextParams): Promise<GraphQLContext> => {
   return { req, res };
 };

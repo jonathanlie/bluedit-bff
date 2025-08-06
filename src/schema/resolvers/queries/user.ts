@@ -10,12 +10,13 @@ export const userQueryResolvers: QueryResolvers = {
     context: GraphQLContext
   ): Promise<User | null> => {
     try {
-      const response = await apiClient.get('/auth/me', {
-        'Cookie': context.req.headers.cookie || '',
-      }) as ApiUser;
+      const response = (await apiClient.get('/auth/me', {
+        Cookie: context.req.headers.cookie || '',
+      })) as ApiUser;
 
       return response as User;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching user:', error);
       return null;
     }

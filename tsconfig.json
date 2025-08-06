@@ -29,16 +29,8 @@
     "incremental": true,
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": [
-    "src/**/*",
-    "__tests__/**/*",
-    "*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "coverage"
-  ],
+  "include": ["src/**/*", "__tests__/**/*", "*.ts"],
+  "exclude": ["node_modules", "dist", "coverage"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node"
