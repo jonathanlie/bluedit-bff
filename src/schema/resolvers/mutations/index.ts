@@ -1,13 +1,13 @@
 import { authMutationResolvers } from './auth.js';
-import { postMutationResolvers } from './post.js';
 import { commentMutationResolvers } from './comment.js';
-import { voteMutationResolvers } from './vote.js';
+import { postMutationResolvers } from './post.js';
 import { subblueditMutationResolvers } from './subbluedit.js';
+import { voteMutationResolvers } from './vote.js';
 
 export const mutationResolvers = {
   ...authMutationResolvers,
-  ...postMutationResolvers,
   ...commentMutationResolvers,
-  ...voteMutationResolvers,
+  ...postMutationResolvers,
   ...subblueditMutationResolvers,
+  ...voteMutationResolvers,
 };
