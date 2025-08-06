@@ -10,6 +10,44 @@ GraphQL Backend for Frontend (BFF) server that acts as a proxy between the front
 - Comments and voting system
 - Session management via HTTP-only cookies
 
+## Development
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+```bash
+npm install
+```
+
+### Available Scripts
+- `npm run dev` - Start development server with hot reload (nodemon)
+- `npm start` - Start production server
+- `npm test` - Run tests (not configured yet)
+- `npm run lint` - Lint code (not configured yet)
+- `npm run format` - Format code (not configured yet)
+
+### Development Server
+The development server runs on `http://localhost:4000` with:
+- Hot reload on file changes
+- GraphQL endpoint at `/`
+- Health check at `/health`
+
+### Project Structure
+```
+src/
+├── config/          # Configuration management
+├── middleware/      # Express middleware
+├── schema/          # GraphQL schema definitions
+│   ├── types/       # GraphQL types
+│   ├── queries/     # GraphQL queries
+│   ├── mutations/   # GraphQL mutations
+│   └── resolvers/   # GraphQL resolvers
+├── services/        # External service integrations
+└── utils/           # Utility functions
+```
+
 ## GraphQL Schema
 
 ### Types
