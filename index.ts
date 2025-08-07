@@ -9,15 +9,46 @@ import { resolvers } from './src/schema/resolvers/index.js';
 import { corsMiddleware } from './src/middleware/cors.js';
 import { contextMiddleware } from './src/middleware/context.js';
 
+// Security middleware imports
+import {
+  securityHeaders,
+  applySecurityMiddleware,
+} from './src/middleware/security.js';
+import {
+  rateLimiter,
+  speedLimiter,
+  healthCheckRateLimiter,
+} from './src/middleware/rate-limit.js';
+import {
+  authenticateJWT,
+  requireAuthForMutations,
+} from './src/middleware/auth.js';
+import {
+  sanitizeBody,
+  validatePayloadSize,
+} from './src/middleware/validation.js';
+
 const app = express();
 
-app.use(corsMiddleware);
-app.use(bodyParser.json());
+// Security middleware (order matters!)
+app.use(securityHeaders); // Security headers first
+app.use(applySecurityMiddleware); // Custom security middleware
+app.use(corsMiddleware); // CORS after security headers
+app.use(validatePayloadSize); // Validate payload size
+app.use(bodyParser.json({ limit: config.security.validation.maxPayloadSize }));
+app.use(sanitizeBody); // Sanitize request body
+app.use(authenticateJWT); // JWT authentication (optional)
+app.use(speedLimiter); // Progressive rate limiting
+app.use(rateLimiter); // Basic rate limiting
 
 // Health check endpoint (must be before Apollo Server)
-app.get('/health', (req: express.Request, res: express.Response) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+app.get(
+  '/health',
+  healthCheckRateLimiter,
+  (req: express.Request, res: express.Response) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  }
+);
 
 const server = new ApolloServer({
   typeDefs,
@@ -28,6 +59,7 @@ await server.start();
 
 app.use(
   '/',
+  requireAuthForMutations, // Require auth for mutations
   expressMiddleware(server, {
     context: contextMiddleware,
   })

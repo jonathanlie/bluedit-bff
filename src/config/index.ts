@@ -23,12 +23,33 @@ interface CookieOptions {
 interface AuthConfig {
   cookieName: string;
   cookieOptions: CookieOptions;
+  jwtSecret: string;
+  jwtExpiresIn: string;
+}
+
+interface SecurityConfig {
+  rateLimit: {
+    windowMs: number;
+    max: number;
+    message: string;
+  };
+  slowDown: {
+    windowMs: number;
+    delayAfter: number;
+    delayMs: number;
+  };
+  validation: {
+    maxQueryDepth: number;
+    maxQueryComplexity: number;
+    maxPayloadSize: string;
+  };
 }
 
 interface Config {
   api: ApiConfig;
   server: ServerConfig;
   auth: AuthConfig;
+  security: SecurityConfig;
 }
 
 export const config: Config = {
@@ -50,6 +71,29 @@ export const config: Config = {
       path: '/',
       sameSite: 'strict',
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    },
+    jwtSecret:
+      process.env['JWT_SECRET'] ||
+      'your-super-secret-jwt-key-change-in-production',
+    jwtExpiresIn: '24h',
+  },
+  security: {
+    rateLimit: {
+      windowMs:
+        process.env['NODE_ENV'] === 'production' ? 15 * 60 * 1000 : 60 * 1000, // 15 min prod, 1 min dev
+      max: process.env['NODE_ENV'] === 'production' ? 100 : 1000, // 100 prod, 1000 dev
+      message: 'Too many requests from this IP, please try again later.',
+    },
+    slowDown: {
+      windowMs:
+        process.env['NODE_ENV'] === 'production' ? 15 * 60 * 1000 : 60 * 1000, // 15 min prod, 1 min dev
+      delayAfter: process.env['NODE_ENV'] === 'production' ? 50 : 500, // 50 prod, 500 dev
+      delayMs: process.env['NODE_ENV'] === 'production' ? 500 : 100, // 500ms prod, 100ms dev
+    },
+    validation: {
+      maxQueryDepth: 10,
+      maxQueryComplexity: 1000,
+      maxPayloadSize: process.env['NODE_ENV'] === 'production' ? '1mb' : '10mb',
     },
   },
 };
